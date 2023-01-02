@@ -26,7 +26,9 @@ public class SecurityConfigurer {
                 .mvcMatchers("/form/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/form/login");
+                .formLogin().loginPage("/form/login").loginProcessingUrl("/doLogin")
+                .and()
+                .cors().disable();
         return http.build();
     }
 
@@ -37,7 +39,7 @@ public class SecurityConfigurer {
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().antMatchers("/ignore1","ignore2");
+        return (web) -> web.ignoring().antMatchers("/ignore1","/ignore2");
     }
 
 }
