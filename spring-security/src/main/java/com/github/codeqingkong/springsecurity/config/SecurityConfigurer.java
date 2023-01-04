@@ -1,11 +1,13 @@
 package com.github.codeqingkong.springsecurity.config;
 
+import com.github.codeqingkong.springsecurity.authentication.SecurityAuthenticationFailureHandler;
 import com.github.codeqingkong.springsecurity.authentication.SecurityAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
@@ -30,6 +32,7 @@ public class SecurityConfigurer {
                 .and()
                 .formLogin().loginPage("/form/login").loginProcessingUrl("/doLogin")
                 .successHandler(authenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
                 .and()
                 .cors().disable();
         return http.build();
@@ -48,6 +51,11 @@ public class SecurityConfigurer {
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new SecurityAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return new SecurityAuthenticationFailureHandler();
     }
 
 }
