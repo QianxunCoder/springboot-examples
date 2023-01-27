@@ -16,6 +16,7 @@ import java.io.IOException;
 public class SecurityAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        // 认证失败
         ObjectMapper objectMapper = new ObjectMapper();
         String failureJson = objectMapper.writeValueAsString(exception);
         response.setContentType("application/json;charset=UTF-8");
