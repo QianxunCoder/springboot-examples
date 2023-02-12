@@ -6,6 +6,7 @@ import com.github.codeqingkong.springsecurity.authentication.handler.SecurityLog
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
  * @date: 2023/1/2
  */
 @Configuration
+@EnableWebSecurity
 public class SecurityConfigurer {
 
     /**
@@ -31,12 +33,16 @@ public class SecurityConfigurer {
                 .mvcMatchers("/form/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/form/login").loginProcessingUrl("/doLogin")
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
-                .and()
-                .logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler())
-                .and()
+                .formLogin(login -> login
+                        .loginPage("/form/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(authenticationSuccessHandler())
+                        .failureHandler(authenticationFailureHandler())
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler(logoutSuccessHandler())
+                )
                 .cors().disable();
         return http.build();
     }

@@ -17,9 +17,10 @@ public class SecurityAuthenticationSuccessHandler implements AuthenticationSucce
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 认证成功
-        ObjectMapper objectMapper = new ObjectMapper();
-        String resultJson = objectMapper.writeValueAsString(authentication);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().println(resultJson);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String resultJson = objectMapper.writeValueAsString(authentication);
+//        response.setContentType("application/json;charset=UTF-8");
+//        response.getWriter().println(resultJson);
+        request.getRequestDispatcher("/index").forward(request,response);
     }
 }

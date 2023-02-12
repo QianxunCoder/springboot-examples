@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class IndexController {
     @GetMapping("/index")
-    @ResponseBody
     public String index(){
-        return "<h1>index</h1>";
+        return "/form/index";
     }
 }
