@@ -1,7 +1,8 @@
 package com.github.codeqingkong.springsecurity.config;
 
-import com.github.codeqingkong.springsecurity.authentication.SecurityAuthenticationFailureHandler;
-import com.github.codeqingkong.springsecurity.authentication.SecurityAuthenticationSuccessHandler;
+import com.github.codeqingkong.springsecurity.authentication.handler.SecurityAuthenticationFailureHandler;
+import com.github.codeqingkong.springsecurity.authentication.handler.SecurityAuthenticationSuccessHandler;
+import com.github.codeqingkong.springsecurity.authentication.handler.SecurityLogoutHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * @author: QingKong
@@ -26,13 +28,14 @@ public class SecurityConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/index").permitAll()
                 .mvcMatchers("/form/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/form/login").loginProcessingUrl("/doLogin")
                 .successHandler(authenticationSuccessHandler())
                 .failureHandler(authenticationFailureHandler())
+                .and()
+                .logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler())
                 .and()
                 .cors().disable();
         return http.build();
@@ -56,6 +59,11 @@ public class SecurityConfigurer {
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(){
         return new SecurityAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler(){
+        return new SecurityLogoutHandler();
     }
 
 }

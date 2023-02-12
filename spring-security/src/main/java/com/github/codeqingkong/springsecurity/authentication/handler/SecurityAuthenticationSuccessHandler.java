@@ -1,4 +1,4 @@
-package com.github.codeqingkong.springsecurity.authentication;
+package com.github.codeqingkong.springsecurity.authentication.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
