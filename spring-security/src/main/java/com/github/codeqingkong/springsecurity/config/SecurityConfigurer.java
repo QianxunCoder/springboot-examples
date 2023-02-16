@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -65,6 +69,17 @@ public class SecurityConfigurer {
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(){
         return new SecurityAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+        UserDetails userDetails = User.withUsername("admin")
+                .password("{noop}123456")
+                .roles("ADMIN")
+                .build();
+        inMemoryUserDetailsManager.createUser(userDetails);
+        return inMemoryUserDetailsManager;
     }
 
     @Bean
