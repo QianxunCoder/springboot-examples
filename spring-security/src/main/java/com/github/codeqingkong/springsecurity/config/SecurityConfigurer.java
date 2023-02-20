@@ -5,6 +5,8 @@ import com.github.codeqingkong.springsecurity.authentication.handler.SecurityAut
 import com.github.codeqingkong.springsecurity.authentication.handler.SecurityLogoutHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -47,7 +49,8 @@ public class SecurityConfigurer {
                         .logoutUrl("/logout")
                         .logoutSuccessHandler(logoutSuccessHandler())
                 )
-                .cors().disable();
+                .cors().disable()
+                .userDetailsService(userDetailsService());
         return http.build();
     }
 
@@ -61,16 +64,48 @@ public class SecurityConfigurer {
         return (web) -> web.ignoring().antMatchers("/ignore1","/ignore2");
     }
 
+    /**
+     * 认证成功后处理
+     * @return
+     */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new SecurityAuthenticationSuccessHandler();
     }
 
+    /**
+     * 认证失败后处理
+     * @return
+     */
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(){
         return new SecurityAuthenticationFailureHandler();
     }
 
+    /**
+     * 注销登录成功后处理
+     * @return
+     */
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler(){
+        return new SecurityLogoutHandler();
+    }
+
+    /**
+     * 返回全局的 AuthenticationManager
+     * @param authenticationConfiguration
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    /**
+     * 设置认证数据源
+     * @return
+     */
     @Bean
     public UserDetailsService userDetailsService(){
         InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
@@ -81,10 +116,4 @@ public class SecurityConfigurer {
         inMemoryUserDetailsManager.createUser(userDetails);
         return inMemoryUserDetailsManager;
     }
-
-    @Bean
-    public LogoutSuccessHandler logoutSuccessHandler(){
-        return new SecurityLogoutHandler();
-    }
-
 }
