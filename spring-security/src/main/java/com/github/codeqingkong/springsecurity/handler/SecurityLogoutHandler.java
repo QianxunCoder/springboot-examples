@@ -1,4 +1,4 @@
-package com.github.codeqingkong.springsecurity.authentication.handler;
+package com.github.codeqingkong.springsecurity.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;

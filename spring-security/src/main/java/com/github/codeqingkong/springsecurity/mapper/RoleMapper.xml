@@ -1,0 +1,21 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.codeqingkong.springsecurity.mapper.RoleMapper">
+    <resultMap id="resultMap" type="com.github.codeqingkong.springsecurity.entity.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="name_zh" property="nameZh"/>
+    </resultMap>
+
+    <select id="listRolesByUserId" resultMap="resultMap">
+        SELECT
+            t1.*
+        FROM
+            role t1
+        INNER JOIN user_role t2 ON t1.id = t2.rid
+        INNER JOIN `user` t3 ON t2.uid = t3.id
+        WHERE t3.id = #{userId}
+    </select>
+</mapper>

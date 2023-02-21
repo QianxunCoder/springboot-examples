@@ -1,8 +1,10 @@
 package com.github.codeqingkong.springsecurity.config;
 
-import com.github.codeqingkong.springsecurity.authentication.handler.SecurityAuthenticationFailureHandler;
-import com.github.codeqingkong.springsecurity.authentication.handler.SecurityAuthenticationSuccessHandler;
-import com.github.codeqingkong.springsecurity.authentication.handler.SecurityLogoutHandler;
+import com.github.codeqingkong.springsecurity.handler.SecurityAuthenticationFailureHandler;
+import com.github.codeqingkong.springsecurity.handler.SecurityAuthenticationSuccessHandler;
+import com.github.codeqingkong.springsecurity.handler.SecurityLogoutHandler;
+import com.github.codeqingkong.springsecurity.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,10 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -26,6 +25,8 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurer {
+    @Autowired
+    private UserServiceImpl userDetailsService;
 
     /**
      * 配置过滤器
@@ -108,12 +109,6 @@ public class SecurityConfigurer {
      */
     @Bean
     public UserDetailsService userDetailsService(){
-        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        UserDetails userDetails = User.withUsername("admin")
-                .password("{noop}123456")
-                .roles("ADMIN")
-                .build();
-        inMemoryUserDetailsManager.createUser(userDetails);
-        return inMemoryUserDetailsManager;
+        return userDetailsService;
     }
 }
