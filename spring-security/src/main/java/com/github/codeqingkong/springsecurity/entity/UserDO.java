@@ -12,7 +12,7 @@ import java.util.List;
  * @author: QingKong
  * @date: 2023/2/21
  */
-public class User implements UserDetails {
+public class UserDO implements UserDetails {
     private Integer id;
     private String username;
     private String password;
@@ -20,11 +20,11 @@ public class User implements UserDetails {
     private Boolean accountNonExpired;
     private Boolean accountNonLocked;
     private Boolean credentialsNonExpired;
-    private List<Role> roles = new ArrayList<>();
+    private List<RoleDO> roleDOS = new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        roles.forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getName())));
+        roleDOS.forEach(roleDO -> grantedAuthorities.add(new SimpleGrantedAuthority(roleDO.getName())));
         return grantedAuthorities;
     }
 
@@ -74,44 +74,31 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    public Boolean getAccountNonExpired() {
-        return accountNonExpired;
-    }
 
     public void setAccountNonExpired(Boolean accountNonExpired) {
         this.accountNonExpired = accountNonExpired;
     }
 
-    public Boolean getAccountNonLocked() {
-        return accountNonLocked;
-    }
 
     public void setAccountNonLocked(Boolean accountNonLocked) {
         this.accountNonLocked = accountNonLocked;
     }
 
-    public Boolean getCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
 
     public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
         this.credentialsNonExpired = credentialsNonExpired;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public List<RoleDO> getRoleDOS() {
+        return roleDOS;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRoles(List<RoleDO> roleDOS) {
+        this.roleDOS = roleDOS;
     }
 
     @Override
@@ -132,7 +119,7 @@ public class User implements UserDetails {
         sb.append(",\"credentialsNonExpired\":")
                 .append(credentialsNonExpired);
         sb.append(",\"roles\":")
-                .append(roles);
+                .append(roleDOS);
         sb.append('}');
         return sb.toString();
     }

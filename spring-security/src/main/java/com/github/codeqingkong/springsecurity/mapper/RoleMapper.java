@@ -1,6 +1,6 @@
 package com.github.codeqingkong.springsecurity.mapper;
 
-import com.github.codeqingkong.springsecurity.entity.Role;
+import com.github.codeqingkong.springsecurity.entity.RoleDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,5 +16,5 @@ public interface RoleMapper {
      * @param userId 用户id
      * @return 用户拥有的角色
      */
-    List<Role> listRolesByUserId(Integer userId);
+    List<RoleDO> listRolesByUserId(Integer userId);
 }

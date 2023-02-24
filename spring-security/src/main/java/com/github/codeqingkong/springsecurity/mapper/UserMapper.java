@@ -1,6 +1,6 @@
 package com.github.codeqingkong.springsecurity.mapper;
 
-import com.github.codeqingkong.springsecurity.entity.User;
+import com.github.codeqingkong.springsecurity.entity.UserDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,5 +14,6 @@ public interface UserMapper {
      * @param name
      * @return
      */
-    User loadUserByUsername(String name);
+    UserDO loadUserByUsername(String name);
+    boolean insertUser(UserDO userDO);
 }

@@ -4,7 +4,7 @@ package com.github.codeqingkong.springsecurity.entity;
  * @author: QingKong
  * @date: 2023/2/21
  */
-public class Role {
+public class RoleDO {
     private Integer id;
     private String name;
     private String nameZh;

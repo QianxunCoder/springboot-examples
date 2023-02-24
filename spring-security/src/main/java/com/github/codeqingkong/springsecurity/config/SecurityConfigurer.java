@@ -37,21 +37,21 @@ public class SecurityConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/form/login").permitAll()
+                .mvcMatchers("/form/login","/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin(login -> login
-                        .loginPage("/form/login")
-                        .loginProcessingUrl("/login")
-                        .successHandler(authenticationSuccessHandler())
-                        .failureHandler(authenticationFailureHandler())
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(logoutSuccessHandler())
-                )
-                .cors().disable()
-                .userDetailsService(userDetailsService());
+//                .formLogin(login -> login
+//                        .loginPage("/form/login")
+//                        .loginProcessingUrl("/login")
+//                        .successHandler(authenticationSuccessHandler())
+//                        .failureHandler(authenticationFailureHandler())
+//                )
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessHandler(logoutSuccessHandler())
+//                )
+//                .userDetailsService(userDetailsService())
+                .cors().disable();
         return http.build();
     }
 
