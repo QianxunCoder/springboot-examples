@@ -5,15 +5,19 @@ import com.github.codeqingkong.springsecurity.handler.SecurityAuthenticationSucc
 import com.github.codeqingkong.springsecurity.handler.SecurityLogoutHandler;
 import com.github.codeqingkong.springsecurity.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.UrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -27,6 +31,8 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class SecurityConfigurer {
     @Autowired
     private UserServiceImpl userDetailsService;
+    @Autowired
+    private CustomSecurityMetadataSource customSecurityMetadataSource;
 
     /**
      * 配置过滤器
@@ -38,8 +44,7 @@ public class SecurityConfigurer {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-//                .mvcMatchers("/form/login").permitAll()
-                .mvcMatchers("/**").permitAll()
+                .mvcMatchers("/form/logoutgin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(login -> login
@@ -54,6 +59,16 @@ public class SecurityConfigurer {
                 )
                 .userDetailsService(userDetailsService())
                 .csrf().disable();
+        ApplicationContext applicationContext = http.getSharedObject(ApplicationContext.class);
+        http.apply(new UrlAuthorizationConfigurer<>(applicationContext))
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+                        object.setSecurityMetadataSource(customSecurityMetadataSource);
+                        object.setRejectPublicInvocations(true);
+                        return object;
+                    }
+                });
         return http.build();
     }
 
