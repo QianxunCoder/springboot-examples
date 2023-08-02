@@ -4,20 +4,14 @@ import com.github.codeqingkong.springsecurity.handler.SecurityAuthenticationFail
 import com.github.codeqingkong.springsecurity.handler.SecurityAuthenticationSuccessHandler;
 import com.github.codeqingkong.springsecurity.handler.SecurityLogoutHandler;
 import com.github.codeqingkong.springsecurity.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.UrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -27,12 +21,11 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
  * @date: 2023/1/2
  */
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfigurer {
-    @Autowired
-    private UserServiceImpl userDetailsService;
-    @Autowired
-    private CustomSecurityMetadataSource customSecurityMetadataSource;
+    private final UserServiceImpl userDetailsService;
+    private final CustomSecurityMetadataSource customSecurityMetadataSource;
 
     /**
      * 配置过滤器
@@ -40,37 +33,7 @@ public class SecurityConfigurer {
      * @return SecurityFilterChain
      * @throws Exception
      */
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http
-                .authorizeRequests()
-                .mvcMatchers("/form/logoutgin").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin(login -> login
-                        .loginPage("/form/login")
-                        .loginProcessingUrl("/login")
-                        .successHandler(authenticationSuccessHandler())
-                        .failureHandler(authenticationFailureHandler())
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(logoutSuccessHandler())
-                )
-                .userDetailsService(userDetailsService())
-                .csrf().disable();
-        ApplicationContext applicationContext = http.getSharedObject(ApplicationContext.class);
-        http.apply(new UrlAuthorizationConfigurer<>(applicationContext))
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                    @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-                        object.setSecurityMetadataSource(customSecurityMetadataSource);
-                        object.setRejectPublicInvocations(true);
-                        return object;
-                    }
-                });
-        return http.build();
-    }
+
 
 
     /**
