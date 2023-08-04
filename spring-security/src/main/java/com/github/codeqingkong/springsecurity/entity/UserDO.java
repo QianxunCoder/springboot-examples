@@ -1,5 +1,6 @@
 package com.github.codeqingkong.springsecurity.entity;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author: QingKong
  * @date: 2023/2/21
  */
+@Data
 public class UserDO implements UserDetails {
     private Integer id;
     private String username;
@@ -91,36 +93,5 @@ public class UserDO implements UserDetails {
 
     public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
         this.credentialsNonExpired = credentialsNonExpired;
-    }
-
-    public List<RoleDO> getRoleDOS() {
-        return roleDOS;
-    }
-
-    public void setRoles(List<RoleDO> roleDOS) {
-        this.roleDOS = roleDOS;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("{");
-        sb.append("\"id\":")
-                .append(id);
-        sb.append(",\"username\":\"")
-                .append(username).append('\"');
-        sb.append(",\"password\":\"")
-                .append(password).append('\"');
-        sb.append(",\"enabled\":")
-                .append(enabled);
-        sb.append(",\"accountNonExpired\":")
-                .append(accountNonExpired);
-        sb.append(",\"accountNonLocked\":")
-                .append(accountNonLocked);
-        sb.append(",\"credentialsNonExpired\":")
-                .append(credentialsNonExpired);
-        sb.append(",\"roles\":")
-                .append(roleDOS);
-        sb.append('}');
-        return sb.toString();
     }
 }
