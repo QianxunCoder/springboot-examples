@@ -13,6 +13,6 @@ public class IndexController {
     @GetMapping("/index")
     @RateLimit(limitType = "/index", limitCount = 1d)
     public String index() {
-        return "index";
+        return "访问成功！";
     }
 }

@@ -1,5 +1,6 @@
 package com.github.codeqingkong.limit;
 
+import com.github.codeqingkong.exception.ServerException;
 import com.google.common.util.concurrent.RateLimiter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,10 +30,9 @@ public class GuavaLimitAop {
         // 使用guava的令牌桶算法获取一个令牌，获取不到则等待
         RateLimiter rateLimiter = RateLimitHelper.getRateLimiter(limitType, limitCount);
         boolean acquire = rateLimiter.tryAcquire();
-        if (acquire) {
-            System.out.println("访问成功");
-        } else {
-            System.out.println("当前访问量过大，请稍后再试");
+        // 3. 如果获取不到令牌，进行限流操作
+        if (!acquire) {
+            throw new ServerException("当前访问人数过多，请稍后再试");
         }
     }
 
