@@ -27,7 +27,7 @@ public class GuavaLimitAop {
         double limitCount = currentMethod.getAnnotation(RateLimit.class).limitCount();
         String limitType = currentMethod.getAnnotation(RateLimit.class).limitType();
         // 使用guava的令牌桶算法获取一个令牌，获取不到则等待
-        RateLimiter rateLimiter = RateLimiter.create(limitCount);
+        RateLimiter rateLimiter = RateLimitHelper.getRateLimiter(limitType, limitCount);
         boolean acquire = rateLimiter.tryAcquire();
         if (acquire) {
             System.out.println("访问成功");
