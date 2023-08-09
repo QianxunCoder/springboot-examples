@@ -1,4 +1,4 @@
-package com.github.codeqingkong;
+package com.github.codeqingkong.limit;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target({java.lang.annotation.ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface RateLimiter {
+public @interface RateLimit {
     String limitType();
     double limitCount() default 5d;
 }
