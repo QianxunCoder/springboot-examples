@@ -1,4 +1,4 @@
-package com.github.codeqingkong.limit;
+package com.github.codeqingkong.limit.guava;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

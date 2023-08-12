@@ -1,4 +1,4 @@
-package com.github.codeqingkong.limit;
+package com.github.codeqingkong.limit.guava;
 
 import com.github.codeqingkong.exception.ServerException;
 import com.google.common.util.concurrent.RateLimiter;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Aspect
 @Component
 public class GuavaLimitAop {
-    @Before("execution(@com.github.codeqingkong.limit.GuavaRateLimit * *(..))")
+    @Before("execution(@com.github.codeqingkong.limit.guava.GuavaRateLimit * *(..))")
     public void limit(JoinPoint joinPoint) {
         // 1. 获取当前的调用方法
         Method currentMethod = getCurrentMethod(joinPoint);

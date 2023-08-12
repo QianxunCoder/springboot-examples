@@ -1,4 +1,4 @@
-package com.github.codeqingkong.limit;
+package com.github.codeqingkong.limit.guava;
 
 import com.google.common.util.concurrent.RateLimiter;
 
