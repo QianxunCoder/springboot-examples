@@ -17,7 +17,7 @@ import java.util.Objects;
 @Aspect
 @Component
 public class GuavaLimitAop {
-    @Before("execution(@com.github.codeqingkong.limit.RateLimit * *(..))")
+    @Before("execution(@com.github.codeqingkong.limit.GuavaRateLimit * *(..))")
     public void limit(JoinPoint joinPoint) {
         // 1. 获取当前的调用方法
         Method currentMethod = getCurrentMethod(joinPoint);
@@ -25,8 +25,8 @@ public class GuavaLimitAop {
             return;
         }
         // 2. 从方法注解上获取限流的配置
-        double limitCount = currentMethod.getAnnotation(RateLimit.class).limitCount();
-        String limitType = currentMethod.getAnnotation(RateLimit.class).limitType();
+        double limitCount = currentMethod.getAnnotation(GuavaRateLimit.class).limitCount();
+        String limitType = currentMethod.getAnnotation(GuavaRateLimit.class).limitType();
         // 使用guava的令牌桶算法获取一个令牌，获取不到则等待
         RateLimiter rateLimiter = RateLimitHelper.getRateLimiter(limitType, limitCount);
         boolean acquire = rateLimiter.tryAcquire();

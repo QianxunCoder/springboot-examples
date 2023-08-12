@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target({java.lang.annotation.ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface RateLimit {
+public @interface GuavaRateLimit {
     String limitType();
     double limitCount() default 5d;
 }
