@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @author kongqing
  * @date 2023/08/04
  */
-@RequestMapping("/index")
+@RequestMapping("/rate-limit")
 @RestController
-public class IndexController {
-    @GetMapping("/guava/rate-limit")
-    @GuavaRateLimit(limitType = "/index/guava/rate-limit", limitCount = 1d)
+public class RateLimitTestController {
+    @GetMapping("/guava")
+    @GuavaRateLimit(limitType = "rate-limit/guava", limitCount = 1d)
     public String guavaRateLimit() {
         return "访问成功！";
     }
 
-    @GetMapping("/sentinel/rate-limit")
+    @GetMapping("/sentinel")
     @SentinelRateLimit(resourceName = "sentinelRateLimit", limitCount = 1)
     public String sentinelRateLimit() {
         return "访问成功！";
