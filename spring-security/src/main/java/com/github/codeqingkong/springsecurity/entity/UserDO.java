@@ -22,11 +22,11 @@ public class UserDO implements UserDetails {
     private Boolean accountNonExpired;
     private Boolean accountNonLocked;
     private Boolean credentialsNonExpired;
-    private List<RoleDO> roleDOS = new ArrayList<>();
+    private List<RoleDO> roles= new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        roleDOS.forEach(roleDO -> grantedAuthorities.add(new SimpleGrantedAuthority(roleDO.getName())));
+        roles.forEach(roleDO -> grantedAuthorities.add(new SimpleGrantedAuthority(roleDO.getName())));
         return grantedAuthorities;
     }
 
