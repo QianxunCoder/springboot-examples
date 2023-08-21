@@ -3,25 +3,29 @@ package com.github.codeqingkong.http;
 import com.alibaba.fastjson2.JSON;
 import okhttp3.*;
 
+import java.lang.reflect.Type;
+
 public class GenericHttpRequest<T> {
     private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient();
-    private final Class<T> responseType;
+    private final Type responseType;
+    private final String baseUrl;
 
-    public GenericHttpRequest(Class<T> responseType) {
+    public GenericHttpRequest(Type responseType,String baseUrl) {
         this.responseType = responseType;
+        this.baseUrl = baseUrl;
     }
 
-    public T sendGetRequestAndParse(String url) throws Exception {
+    public T sendGetRequestAndParse() throws Exception {
         Request request = new Request.Builder()
-                .url(url)
+                .url(this.baseUrl)
                 .build();
         return executeRequest(request);
     }
 
-    public T sendPostRequestAndParse(String url, String postData) throws Exception {
+    public T sendPostRequestAndParse(String postData) throws Exception {
         RequestBody requestBody = RequestBody.create(postData, MediaType.parse("application/json"));
         Request request = new Request.Builder()
-                .url(url)
+                .url(this.baseUrl)
                 .post(requestBody)
                 .build();
         return executeRequest(request);
@@ -33,7 +37,7 @@ public class GenericHttpRequest<T> {
                 throw new RuntimeException("Unexpected code " + response);
             }
             assert response.body() != null;
-            String responseBody = JSON.parseObject(response.body().string()).getJSONObject("data").toJSONString();
+            String responseBody = response.body().string();
             return JSON.parseObject(responseBody, responseType);
         }
     }
