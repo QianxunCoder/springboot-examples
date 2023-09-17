@@ -24,7 +24,8 @@ import java.util.Objects;
 @Component
 public class SentinelLimitAop {
     @Pointcut("@annotation(com.github.codeqingkong.limit.sentinel.SentinelRateLimit)")
-    public void rateLimit() {}
+    public void rateLimit() {
+    }
 
     @Around("rateLimit()")
     public Object around(ProceedingJoinPoint joinPoint) {
@@ -42,11 +43,9 @@ public class SentinelLimitAop {
         // 配置流控资源和规则
         initFlowRule(resourceName, limitCount);
 
-        Entry entry = null;
         Object result = null;
-        try {
+        try (Entry entry = SphU.entry(resourceName)) {
             // 执行限流操作
-            entry = SphU.entry(resourceName);
             try {
                 result = joinPoint.proceed();
             } catch (Throwable throwable) {
@@ -55,10 +54,6 @@ public class SentinelLimitAop {
         } catch (BlockException e) {
             // 资源被限流，这里做限流后的处理
             throw new ServerException("当前访问人数过多，请稍后再试");
-        } finally {
-            if (entry != null) {
-                entry.exit();
-            }
         }
         return result;
 
