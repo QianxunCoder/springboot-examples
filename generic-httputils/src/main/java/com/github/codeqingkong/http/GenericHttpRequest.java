@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import okhttp3.*;
 
 import java.lang.reflect.Type;
-
 public class GenericHttpRequest<T> {
     private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient();
     private final Type responseType;
